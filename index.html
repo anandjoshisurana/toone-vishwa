@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>TOONE VISHWA – Cartoon Classroom</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>TOONE VISHWA – Classroom</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="app">
-  <!-- CLASSROOM -->
-  <div id="classroom">
-    <!-- CLICKABLE AREAS -->
-    <button class="hotspot board" title="Whiteboard"></button>
-    <button class="hotspot teacher" title="Teacher"></button>
-    <button class="hotspot students" title="Students"></button>
-  </div>
+<div id="classroom">
+  <!-- invisible click zones -->
+  <div class="hotspot board"></div>
+  <div class="hotspot teacher"></div>
+  <div class="hotspot students"></div>
+</div>
 
-  <!-- ICON MENU -->
-  <div class="menu">
-    <button id="settings">⚙️</button>
-    <button id="record">🎥</button>
-    <button id="add">➕</button>
-    <button id="exit">❌</button>
-  </div>
+<!-- right side icons -->
+<div class="menu">
+  <button id="settings">⚙️</button>
+  <button id="record">🎥</button>
+  <button id="add">➕</button>
+  <button id="exit">❌</button>
 </div>
 
 <script src="script.js"></script>
