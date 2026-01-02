@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>TOONE VISHWA – Cartoon Classroom</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<canvas id="scene"></canvas>
+<div id="app">
+  <!-- CLASSROOM -->
+  <div id="classroom">
+    <!-- CLICKABLE AREAS -->
+    <button class="hotspot board" title="Whiteboard"></button>
+    <button class="hotspot teacher" title="Teacher"></button>
+    <button class="hotspot students" title="Students"></button>
+  </div>
 
-<!-- ICON MENU -->
-<div class="menu">
-  <div title="Settings">⚙️</div>
-  <div title="Record">🎥</div>
-  <div title="Add Student">➕</div>
-  <div title="Exit">❌</div>
+  <!-- ICON MENU -->
+  <div class="menu">
+    <button id="settings">⚙️</button>
+    <button id="record">🎥</button>
+    <button id="add">➕</button>
+    <button id="exit">❌</button>
+  </div>
 </div>
-
-<!-- THREE JS -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
 
 <script src="script.js"></script>
 </body>
