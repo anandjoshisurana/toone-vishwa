@@ -1,33 +1,25 @@
-// ===== HOTSPOT ACTIONS =====
-document.querySelector(".hotspot.board").onclick = () => {
-  alert("Whiteboard:\nTOONE VISHWA\nWelcome to the Classroom!");
+document.querySelector(".board").onclick = () => {
+  alert("📋 WHITEBOARD\n\nTOONE VISHWA");
 };
 
-document.querySelector(".hotspot.teacher").onclick = () => {
-  alert("Teacher:\nHello Students 👩‍🏫");
+document.querySelector(".teacher").onclick = () => {
+  alert("👩‍🏫 Teacher:\nGood Morning Students!");
 };
 
-document.querySelector(".hotspot.students").onclick = () => {
-  alert("Students:\nAll students are present 👦👧");
+document.querySelector(".students").onclick = () => {
+  alert("👦👧 Students:\nAll are present!");
 };
 
-// ===== ICON ACTIONS =====
 document.getElementById("settings").onclick = () => {
-  alert("Settings:\n• Sound ON/OFF\n• Zoom Reset");
+  alert("⚙️ Settings (demo)");
 };
 
-document.getElementById("record").onclick = async () => {
-  if (!navigator.mediaDevices) {
-    alert("Recording not supported");
-    return;
-  }
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  alert("🎤 Recording started (demo)");
-  stream.getTracks().forEach(t => t.stop());
+document.getElementById("record").onclick = () => {
+  alert("🎥 Recording started (demo)");
 };
 
 document.getElementById("add").onclick = () => {
-  alert("➕ Add Student:\nNew student added (demo)");
+  alert("➕ New student added (demo)");
 };
 
 document.getElementById("exit").onclick = () => {
