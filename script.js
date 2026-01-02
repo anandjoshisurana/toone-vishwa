@@ -1,12 +1,12 @@
-// ===== BASIC =====
+// ===== BASIC SETUP =====
 const canvas = document.getElementById("scene");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
 
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
-camera.position.set(0, 2, 8);
-camera.lookAt(0, 2, 0);
+camera.position.set(0, 2.2, 6);
+camera.lookAt(0, 1.8, -4);
 
 // RENDERER
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
@@ -14,7 +14,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // LIGHTS
 scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-const light = new THREE.DirectionalLight(0xffffff, 0.8);
+const light = new THREE.DirectionalLight(0xffffff, 0.9);
 light.position.set(5,10,5);
 scene.add(light);
 
@@ -35,7 +35,7 @@ scene.add(school);
 
 const door = new THREE.Mesh(
   new THREE.BoxGeometry(1.2,2,0.3),
-  new THREE.MeshStandardMaterial({color:0xff0000})
+  new THREE.MeshStandardMaterial({color:0x8b4513})
 );
 door.position.set(0,1,2.15);
 scene.add(door);
@@ -47,76 +47,108 @@ scene.add(classroom);
 
 // FLOOR
 const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(10,10),
-  new THREE.MeshStandardMaterial({color:0xe0cda9})
+  new THREE.PlaneGeometry(12,12),
+  new THREE.MeshStandardMaterial({color:0xe6d3a3})
 );
 floor.rotation.x = -Math.PI/2;
 classroom.add(floor);
 
 // WALLS
-const wallMaterial = new THREE.MeshStandardMaterial({color:0xfff3cd});
-const backWall = new THREE.Mesh(new THREE.PlaneGeometry(10,4), wallMaterial);
-backWall.position.set(0,2,-5);
+const wallMat = new THREE.MeshStandardMaterial({color:0xfff1cc});
+const backWall = new THREE.Mesh(new THREE.PlaneGeometry(12,4), wallMat);
+backWall.position.set(0,2,-6);
 classroom.add(backWall);
 
-const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(10,4), wallMaterial);
+const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(12,4), wallMat);
 leftWall.rotation.y = Math.PI/2;
-leftWall.position.set(-5,2,0);
+leftWall.position.set(-6,2,0);
 classroom.add(leftWall);
 
-const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(10,4), wallMaterial);
+const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(12,4), wallMat);
 rightWall.rotation.y = -Math.PI/2;
-rightWall.position.set(5,2,0);
+rightWall.position.set(6,2,0);
 classroom.add(rightWall);
 
 // ===== WHITEBOARD =====
 const board = new THREE.Mesh(
-  new THREE.PlaneGeometry(4,2),
+  new THREE.PlaneGeometry(4.5,2.2),
   new THREE.MeshStandardMaterial({color:0xffffff})
 );
-board.position.set(0,2.3,-4.9);
+board.position.set(0,2.4,-5.95);
 classroom.add(board);
 
 // BOARD TEXT
-const canvasText = document.createElement("canvas");
-canvasText.width = 512;
-canvasText.height = 256;
-const ctx = canvasText.getContext("2d");
+const txtCanvas = document.createElement("canvas");
+txtCanvas.width = 512;
+txtCanvas.height = 256;
+const ctx = txtCanvas.getContext("2d");
 ctx.fillStyle = "#ffffff";
 ctx.fillRect(0,0,512,256);
 ctx.fillStyle = "#000000";
 ctx.font = "bold 48px Arial";
 ctx.textAlign = "center";
 ctx.fillText("TOONE VISHWA",256,140);
+board.material.map = new THREE.CanvasTexture(txtCanvas);
 
-const boardTexture = new THREE.CanvasTexture(canvasText);
-board.material.map = boardTexture;
-board.material.needsUpdate = true;
+// ===== TEACHER (HUMAN LIKE) =====
+const teacherGroup = new THREE.Group();
 
-// ===== TEACHER =====
-const teacher = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.3,0.3,1.6),
+// body
+const tBody = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.35,0.4,1.4),
   new THREE.MeshStandardMaterial({color:0x1565c0})
 );
-teacher.position.set(0,0.8,-3.5);
-classroom.add(teacher);
+tBody.position.y = 0.7;
+teacherGroup.add(tBody);
 
-// ===== CHILDREN =====
-function createStudent(x,z){
-  const s = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.25,0.25,1.2),
-    new THREE.MeshStandardMaterial({color:0xff8f00})
+// head
+const tHead = new THREE.Mesh(
+  new THREE.SphereGeometry(0.25),
+  new THREE.MeshStandardMaterial({color:0xffdbac})
+);
+tHead.position.y = 1.6;
+teacherGroup.add(tHead);
+
+teacherGroup.position.set(0,0,-4.5);
+classroom.add(teacherGroup);
+
+// ===== BENCH + STUDENT FUNCTION =====
+function createBenchWithStudent(x,z){
+  // bench
+  const bench = new THREE.Mesh(
+    new THREE.BoxGeometry(1.6,0.2,0.6),
+    new THREE.MeshStandardMaterial({color:0x8d6e63})
   );
-  s.position.set(x,0.6,z);
-  classroom.add(s);
-}
-createStudent(-1, -1);
-createStudent(0, -1);
-createStudent(1, -1);
-createStudent(-1, -2);
-createStudent(1, -2);
+  bench.position.set(x,0.4,z);
+  classroom.add(bench);
 
-// ===== RAYCAST =====
+  // student body
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.25,0.3,1.1),
+    new THREE.MeshStandardMaterial({color:0xff9800})
+  );
+  body.position.set(x,0.95,z);
+  classroom.add(body);
+
+  // head
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22),
+    new THREE.MeshStandardMaterial({color:0xffdbac})
+  );
+  head.position.set(x,1.6,z);
+  classroom.add(head);
+}
+
+// STUDENTS ROWS
+createBenchWithStudent(-2, -2);
+createBenchWithStudent(0, -2);
+createBenchWithStudent(2, -2);
+
+createBenchWithStudent(-2, -3.5);
+createBenchWithStudent(0, -3.5);
+createBenchWithStudent(2, -3.5);
+
+// ===== RAYCAST DOOR =====
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -133,8 +165,8 @@ function enterClassroom(){
   school.visible=false;
   door.visible=false;
   classroom.visible=true;
-  camera.position.set(0,2,4);
-  camera.lookAt(0,2,-4);
+  camera.position.set(0,2.2,4);
+  camera.lookAt(0,2,-5);
 }
 
 const exitBtn = document.querySelector(".menu div:last-child");
@@ -142,8 +174,8 @@ exitBtn.onclick = ()=>{
   classroom.visible=false;
   school.visible=true;
   door.visible=true;
-  camera.position.set(0,2,8);
-  camera.lookAt(0,2,0);
+  camera.position.set(0,2.2,6);
+  camera.lookAt(0,1.8,0);
 };
 
 // ===== RESIZE =====
