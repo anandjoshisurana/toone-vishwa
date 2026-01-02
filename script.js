@@ -1,28 +1,37 @@
-const canvas = document.getElementById("scene");
+// ===== HOTSPOT ACTIONS =====
+document.querySelector(".hotspot.board").onclick = () => {
+  alert("Whiteboard:\nTOONE VISHWA\nWelcome to the Classroom!");
+};
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xff0000); // RED SCREEN
+document.querySelector(".hotspot.teacher").onclick = () => {
+  alert("Teacher:\nHello Students 👩‍🏫");
+};
 
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera.position.z = 5;
+document.querySelector(".hotspot.students").onclick = () => {
+  alert("Students:\nAll students are present 👦👧");
+};
 
-const renderer = new THREE.WebGLRenderer({ canvas });
-renderer.setSize(window.innerWidth, window.innerHeight);
+// ===== ICON ACTIONS =====
+document.getElementById("settings").onclick = () => {
+  alert("Settings:\n• Sound ON/OFF\n• Zoom Reset");
+};
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+document.getElementById("record").onclick = async () => {
+  if (!navigator.mediaDevices) {
+    alert("Recording not supported");
+    return;
+  }
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  alert("🎤 Recording started (demo)");
+  stream.getTracks().forEach(t => t.stop());
+};
 
-function animate() {
-  requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
-}
-animate();
+document.getElementById("add").onclick = () => {
+  alert("➕ Add Student:\nNew student added (demo)");
+};
+
+document.getElementById("exit").onclick = () => {
+  if (confirm("Exit classroom?")) {
+    alert("Exited");
+  }
+};
