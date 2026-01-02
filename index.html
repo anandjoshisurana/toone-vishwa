@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>TOONE VISHWA – Smart School</title>
 
 <style>
@@ -9,52 +8,65 @@ html,body{
   margin:0;
   width:100%;
   height:100%;
-  font-family:Arial, sans-serif;
+  font-family:Arial;
   overflow:hidden;
 }
 
-/* ================= SCHOOL ================= */
-#school{
+/* SKY & GROUND */
+#world{
   width:100%;
   height:100%;
-  background:linear-gradient(#87ceeb 60%, #4caf50 40%);
+  background:linear-gradient(#7ec8ff 60%, #4caf50 40%);
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-end;
 }
 
-#building{
-  width:500px;
-  height:300px;
-  background:#f2f2f2;
+/* SCHOOL BUILDING */
+#school{
+  width:700px;
+  height:420px;
+  background:#eaeaea;
   border:6px solid #333;
   position:relative;
-  text-align:center;
 }
 
-#building h2{
-  margin:10px 0;
-}
-
-.rooms{
+/* FLOORS */
+.floor{
+  width:100%;
+  height:140px;
+  border-top:3px solid #333;
   display:flex;
   justify-content:space-around;
-  margin-top:60px;
+  align-items:center;
 }
 
-.room{
-  width:100px;
-  height:100px;
-  background:#ffc107;
+/* WINDOWS */
+.window{
+  width:70px;
+  height:60px;
+  background:#bbdefb;
   border:3px solid #333;
+}
+
+/* MAIN GATE */
+#gate{
+  position:absolute;
+  bottom:0;
+  left:35%;
+  width:30%;
+  height:90px;
+  background:#795548;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:20px;
   font-weight:bold;
   cursor:pointer;
 }
 
-/* ================= CLASSROOM ================= */
+/* CLASSROOM */
 #classroom{
   display:none;
   width:100%;
@@ -63,23 +75,22 @@ html,body{
   position:relative;
 }
 
-/* board */
+/* BOARD */
 #board{
   position:absolute;
   top:5%;
   left:25%;
   width:50%;
-  height:18%;
+  height:20%;
   background:white;
   border:6px solid #333;
+  font-size:30px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:30px;
-  font-weight:bold;
 }
 
-/* teacher */
+/* TEACHER */
 .teacher{
   position:absolute;
   top:30%;
@@ -88,12 +99,11 @@ html,body{
   height:120px;
   background:#2196f3;
   border-radius:20px;
-  cursor:pointer;
 }
 .teacher::before{
   content:"";
   position:absolute;
-  top:-32px;
+  top:-30px;
   left:5px;
   width:30px;
   height:30px;
@@ -101,37 +111,39 @@ html,body{
   border-radius:50%;
 }
 
-/* benches */
-.bench{
-  position:absolute;
-  height:14px;
-  background:#795548;
-}
-.b1{left:15%;bottom:30%;width:30%}
-.b2{left:55%;bottom:30%;width:30%}
-
-/* students */
+/* STUDENTS */
 .student{
   position:absolute;
-  width:34px;
-  height:90px;
+  width:32px;
+  height:80px;
   background:#ff9800;
-  border-radius:18px;
+  border-radius:16px;
   cursor:pointer;
 }
-.student.absent{ background:#9e9e9e; }
 .student::before{
   content:"";
   position:absolute;
-  top:-28px;
-  left:4px;
+  top:-25px;
+  left:3px;
   width:26px;
   height:26px;
   background:#ffdbac;
   border-radius:50%;
 }
+.student.absent{
+  background:#9e9e9e;
+}
 
-/* info */
+/* BENCHES */
+.bench{
+  position:absolute;
+  height:14px;
+  background:#6d4c41;
+}
+.b1{left:15%;bottom:32%;width:30%}
+.b2{left:55%;bottom:32%;width:30%}
+
+/* UI */
 #info{
   position:absolute;
   top:20px;
@@ -140,46 +152,46 @@ html,body{
   padding:10px;
   border:3px solid #333;
 }
-
-/* buttons */
-#exit,#report{
+#exit{
   position:absolute;
+  top:20px;
   right:20px;
-  padding:10px 14px;
-  border:none;
+  background:red;
   color:white;
-  cursor:pointer;
+  padding:10px;
+  border:none;
 }
-#exit{ top:20px; background:red; }
-#report{ top:70px; background:#4caf50; }
 </style>
 </head>
 
 <body>
 
-<!-- ================= SCHOOL ================= -->
-<div id="school">
-  <div id="building">
-    <h2>SCHOOL BUILDING</h2>
-    <p>Select Classroom</p>
-    <div class="rooms">
-      <div class="room" onclick="enterClass('Class 1',4)">Class 1</div>
-      <div class="room" onclick="enterClass('Class 2',5)">Class 2</div>
-      <div class="room" onclick="enterClass('Class 3',6)">Class 3</div>
+<!-- ===== SCHOOL VIEW ===== -->
+<div id="world">
+  <div id="school">
+    <div class="floor">
+      <div class="window"></div>
+      <div class="window"></div>
+      <div class="window"></div>
     </div>
+    <div class="floor">
+      <div class="window"></div>
+      <div class="window"></div>
+      <div class="window"></div>
+    </div>
+    <div class="floor"></div>
+
+    <div id="gate" onclick="enterClass()">ENTER SCHOOL</div>
   </div>
 </div>
 
-<!-- ================= CLASSROOM ================= -->
+<!-- ===== CLASSROOM ===== -->
 <div id="classroom">
-
   <div id="board">TOONE VISHWA</div>
 
   <div id="info">
-    <div><b id="className"></b></div>
-    <div>Present: <b id="present"></b></div>
-    <div>Absent: <b id="absent"></b></div>
-    <div style="font-size:12px;">(Click student)</div>
+    Present: <b id="present"></b><br>
+    Absent: <b id="absent"></b>
   </div>
 
   <div class="teacher" onclick="teacherVoice()"></div>
@@ -190,45 +202,38 @@ html,body{
   <div id="students"></div>
 
   <button id="exit" onclick="exitClass()">❌ Exit</button>
-  <button id="report" onclick="showReport()">📋 Report</button>
 </div>
 
 <script>
-let total=0;
+let total=6;
 
-/* ENTER CLASS */
-function enterClass(name,count){
-  document.getElementById("school").style.display="none";
+function enterClass(){
+  document.getElementById("world").style.display="none";
   document.getElementById("classroom").style.display="block";
-  document.getElementById("className").innerText=name;
-  total=count;
-  createStudents(count);
+  createStudents();
   updateAttendance();
   teacherVoice(true);
 }
 
-/* EXIT */
 function exitClass(){
   document.getElementById("classroom").style.display="none";
-  document.getElementById("school").style.display="flex";
+  document.getElementById("world").style.display="flex";
 }
 
-/* CREATE STUDENTS */
-function createStudents(count){
+function createStudents(){
   const box=document.getElementById("students");
   box.innerHTML="";
   const pos=[20,28,36,56,64,72];
-  for(let i=0;i<count;i++){
+  for(let i=0;i<total;i++){
     const s=document.createElement("div");
     s.className="student";
     s.style.left=pos[i]+"%";
-    s.style.bottom="33%";
+    s.style.bottom="35%";
     s.onclick=()=>{ s.classList.toggle("absent"); updateAttendance(); };
     box.appendChild(s);
   }
 }
 
-/* ATTENDANCE */
 function updateAttendance(){
   const s=document.querySelectorAll(".student");
   let p=0;
@@ -237,23 +242,11 @@ function updateAttendance(){
   document.getElementById("absent").innerText=total-p;
 }
 
-/* REPORT */
-function showReport(){
-  alert(
-    "Attendance Report\n\n"+
-    document.getElementById("className").innerText+
-    "\nPresent: "+document.getElementById("present").innerText+
-    "\nAbsent: "+document.getElementById("absent").innerText
-  );
-}
-
-/* TEACHER VOICE */
 function teacherVoice(auto=false){
-  const text = auto
-    ? "નમસ્તે વિદ્યાર્થીઓ, આપનું સ્વાગત છે"
-    : "ध्यान से बैठो और पढ़ाई करो";
-  const msg=new SpeechSynthesisUtterance(text);
-  msg.lang= auto ? "gu-IN":"hi-IN";
+  const msg=new SpeechSynthesisUtterance(
+    auto ? "નમસ્તે વિદ્યાર્થીઓ" : "ध्यान से बैठो"
+  );
+  msg.lang=auto?"gu-IN":"hi-IN";
   speechSynthesis.speak(msg);
 }
 </script>
