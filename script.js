@@ -108,3 +108,17 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+function exitClassroom() {
+  classroom.visible = false;
+  school.visible = true;
+  door.visible = true;
+
+  camera.position.set(0, 2, 8);
+  camera.lookAt(0, 2, 0);
+}
+const exitBtn = document.querySelector(".menu div:last-child");
+
+exitBtn.addEventListener("click", () => {
+  exitClassroom();
+});
+
