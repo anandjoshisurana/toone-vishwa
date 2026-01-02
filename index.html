@@ -1,26 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TOONE VISHWA – Classroom</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>TOONE VISHWA – Smart Classroom</title>
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+  background:#cce7ff;
+}
+
+/* ===== CLASSROOM CANVAS ===== */
+#classroom{
+  width:100%;
+  height:100%;
+  position:relative;
+  background:linear-gradient(#bde7ff 0%, #fff 40%, #7fd17f 100%);
+}
+
+/* ===== WHITEBOARD ===== */
+#board{
+  position:absolute;
+  top:8%;
+  left:30%;
+  width:40%;
+  height:22%;
+  background:white;
+  border:8px solid #333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  font-weight:bold;
+}
+
+/* ===== TEACHER ===== */
+.teacher{
+  position:absolute;
+  top:38%;
+  left:48%;
+  width:40px;
+  height:120px;
+  background:#1e88e5;
+  border-radius:20px;
+}
+.teacher::before{
+  content:"";
+  position:absolute;
+  top:-35px;
+  left:5px;
+  width:30px;
+  height:30px;
+  background:#ffdbac;
+  border-radius:50%;
+}
+
+/* ===== STUDENTS ===== */
+.student{
+  position:absolute;
+  width:35px;
+  height:90px;
+  background:#ff9800;
+  border-radius:18px;
+}
+.student::before{
+  content:"";
+  position:absolute;
+  top:-30px;
+  left:4px;
+  width:27px;
+  height:27px;
+  background:#ffdbac;
+  border-radius:50%;
+}
+
+/* student positions */
+.s1{left:20%;bottom:18%}
+.s2{left:30%;bottom:18%}
+.s3{left:40%;bottom:18%}
+.s4{left:60%;bottom:18%}
+.s5{left:70%;bottom:18%}
+
+/* ===== BENCHES ===== */
+.bench{
+  position:absolute;
+  height:12px;
+  background:#8d6e63;
+}
+.b1{left:18%;bottom:16%;width:25%}
+.b2{left:55%;bottom:16%;width:25%}
+
+/* ===== ICON MENU ===== */
+.menu{
+  position:fixed;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.menu button{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  background:white;
+  box-shadow:0 2px 5px rgba(0,0,0,.3);
+}
+</style>
 </head>
+
 <body>
 
 <div id="classroom">
-  <!-- Click areas -->
-  <div class="hotspot board"></div>
-  <div class="hotspot teacher"></div>
-  <div class="hotspot students"></div>
+
+  <div id="board">TOONE VISHWA</div>
+
+  <div class="teacher" onclick="teacherTalk()"></div>
+
+  <div class="bench b1"></div>
+  <div class="bench b2"></div>
+
+  <div class="student s1" onclick="studentTalk()"></div>
+  <div class="student s2" onclick="studentTalk()"></div>
+  <div class="student s3" onclick="studentTalk()"></div>
+  <div class="student s4" onclick="studentTalk()"></div>
+  <div class="student s5" onclick="studentTalk()"></div>
+
 </div>
 
 <div class="menu">
-  <button id="settings">⚙️</button>
-  <button id="record">🎥</button>
-  <button id="add">➕</button>
-  <button id="exit">❌</button>
+  <button onclick="settings()">⚙️</button>
+  <button onclick="record()">🎥</button>
+  <button onclick="addStudent()">➕</button>
+  <button onclick="exitClass()">❌</button>
 </div>
 
-<script src="script.js"></script>
+<script>
+function teacherTalk(){
+  alert("👩‍🏫 Teacher:\nGood Morning Students!");
+}
+function studentTalk(){
+  alert("👦👧 Student:\nYes Teacher!");
+}
+function settings(){
+  alert("⚙️ Settings\n• Sound ON/OFF\n• Reset View");
+}
+function record(){
+  alert("🎤 Recording Started (Demo)");
+}
+function addStudent(){
+  alert("➕ New Student Added (Demo)");
+}
+function exitClass(){
+  if(confirm("Exit Classroom?")){
+    alert("Exited");
+  }
+}
+</script>
+
 </body>
 </html>
