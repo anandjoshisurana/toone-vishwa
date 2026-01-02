@@ -1,63 +1,60 @@
-* { box-sizing: border-box; }
-body {
+* {
   margin: 0;
-  background: #111;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: Arial, sans-serif;
 }
 
-#app {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===== CLASSROOM IMAGE ===== */
+/* ===== CLASSROOM ===== */
 #classroom {
-  width: 100%;
-  height: 100%;
-  background-image: url("https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?q=80&w=1920&auto=format&fit=crop");
-  /* ↑ cartoon-style classroom image (safe & public). You can replace later */
+  position: fixed;
+  inset: 0;                 /* FULL SCREEN */
+  background-image: url("https://i.imgur.com/4ZQZ4Zk.png");
+  /* ↑ cartoon classroom image (stable CDN) */
   background-size: cover;
   background-position: center;
-  position: relative;
+  background-repeat: no-repeat;
 }
 
-/* ===== HOTSPOTS (INVISIBLE CLICK AREAS) ===== */
+/* ===== HOTSPOTS ===== */
 .hotspot {
   position: absolute;
-  background: rgba(255,255,255,0);
-  border: none;
   cursor: pointer;
 }
 
-/* Whiteboard area */
+/* board */
 .hotspot.board {
   top: 18%;
-  left: 35%;
-  width: 30%;
-  height: 22%;
-}
-
-/* Teacher area */
-.hotspot.teacher {
-  top: 40%;
-  left: 45%;
-  width: 10%;
+  left: 30%;
+  width: 40%;
   height: 25%;
 }
 
-/* Students area */
+/* teacher */
+.hotspot.teacher {
+  top: 42%;
+  left: 46%;
+  width: 8%;
+  height: 22%;
+}
+
+/* students */
 .hotspot.students {
-  bottom: 15%;
-  left: 10%;
-  width: 80%;
-  height: 30%;
+  bottom: 10%;
+  left: 5%;
+  width: 90%;
+  height: 35%;
 }
 
 /* ===== ICON MENU ===== */
 .menu {
-  position: absolute;
+  position: fixed;
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
@@ -72,6 +69,6 @@ body {
   border-radius: 50%;
   border: none;
   font-size: 20px;
-  cursor: pointer;
   background: #fff;
+  cursor: pointer;
 }
