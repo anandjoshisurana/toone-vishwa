@@ -17,7 +17,7 @@ html,body{
 button{
   cursor:pointer;
   border:none;
-  padding:10px 16px;
+  padding:8px 14px;
   font-size:14px;
   border-radius:4px;
 }
@@ -33,16 +33,11 @@ button{
 }
 
 #building{
-  width:420px;
-  height:260px;
+  width:460px;
+  height:280px;
   background:#f5f5f5;
   border:6px solid #333;
   text-align:center;
-  position:relative;
-}
-
-#building h2{
-  margin:10px 0;
 }
 
 .rooms{
@@ -52,8 +47,8 @@ button{
 }
 
 .room{
-  width:90px;
-  height:90px;
+  width:100px;
+  height:100px;
   background:#ffc107;
   border:3px solid #333;
   display:flex;
@@ -63,7 +58,7 @@ button{
   cursor:pointer;
 }
 
-/* ===== CLASSROOM VIEW ===== */
+/* ===== CLASSROOM ===== */
 #classroom{
   width:100%;
   height:100%;
@@ -84,7 +79,7 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:30px;
+  font-size:28px;
   font-weight:bold;
 }
 
@@ -116,8 +111,8 @@ button{
   height:14px;
   background:#795548;
 }
-.b1{left:18%;bottom:32%;width:28%}
-.b2{left:54%;bottom:32%;width:28%}
+.b1{left:15%;bottom:32%;width:30%}
+.b2{left:55%;bottom:32%;width:30%}
 
 /* students */
 .student{
@@ -142,13 +137,7 @@ button{
   border-radius:50%;
 }
 
-.s1{left:22%;bottom:35%}
-.s2{left:30%;bottom:35%}
-.s3{left:38%;bottom:35%}
-.s4{left:58%;bottom:35%}
-.s5{left:66%;bottom:35%}
-
-/* info panel */
+/* info */
 #info{
   position:absolute;
   left:20px;
@@ -158,12 +147,19 @@ button{
   border:3px solid #333;
 }
 
-/* exit */
+/* exit & report */
 #exit{
   position:absolute;
   right:20px;
   top:20px;
   background:red;
+  color:white;
+}
+#report{
+  position:absolute;
+  right:20px;
+  top:70px;
+  background:#4caf50;
   color:white;
 }
 </style>
@@ -175,11 +171,11 @@ button{
 <div id="school">
   <div id="building">
     <h2>SCHOOL BUILDING</h2>
-    <p>Click on a class</p>
+    <p>Select Class</p>
     <div class="rooms">
-      <div class="room" onclick="enterClass('Class 1')">Class 1</div>
-      <div class="room" onclick="enterClass('Class 2')">Class 2</div>
-      <div class="room" onclick="enterClass('Class 3')">Class 3</div>
+      <div class="room" onclick="enterClass('Class 1',4)">Class 1</div>
+      <div class="room" onclick="enterClass('Class 2',5)">Class 2</div>
+      <div class="room" onclick="enterClass('Class 3',6)">Class 3</div>
     </div>
   </div>
 </div>
@@ -190,9 +186,10 @@ button{
   <div id="board">TOONE VISHWA</div>
 
   <div id="info">
-    <div><b id="className">Class</b></div>
-    <div>Students Present: <b id="count">5</b></div>
-    <div style="font-size:12px;">(Click student to mark absent)</div>
+    <div><b id="className"></b></div>
+    <div>Present: <b id="presentCount">0</b></div>
+    <div>Absent: <b id="absentCount">0</b></div>
+    <div style="font-size:12px;">(Click student)</div>
   </div>
 
   <div class="teacher" onclick="teacherVoice()"></div>
@@ -200,61 +197,83 @@ button{
   <div class="bench b1"></div>
   <div class="bench b2"></div>
 
-  <div class="student s1" onclick="toggleAttendance(this)"></div>
-  <div class="student s2" onclick="toggleAttendance(this)"></div>
-  <div class="student s3" onclick="toggleAttendance(this)"></div>
-  <div class="student s4" onclick="toggleAttendance(this)"></div>
-  <div class="student s5" onclick="toggleAttendance(this)"></div>
+  <!-- students container -->
+  <div id="students"></div>
 
   <button id="exit" onclick="exitClass()">❌ Exit</button>
+  <button id="report" onclick="showReport()">📋 Report</button>
 </div>
 
 <script>
-let currentCount = 5;
+let totalStudents = 0;
 
-/* enter classroom */
-function enterClass(name){
+/* ENTER CLASS */
+function enterClass(name,count){
   document.getElementById("school").style.display="none";
   document.getElementById("classroom").style.display="block";
   document.getElementById("className").innerText = name;
-  resetAttendance();
+
+  totalStudents = count;
+  createStudents(count);
+  updateAttendance();
+  teacherVoice(true);
 }
 
-/* exit classroom */
+/* EXIT */
 function exitClass(){
   document.getElementById("classroom").style.display="none";
   document.getElementById("school").style.display="flex";
 }
 
-/* teacher voice (NO MIC needed) */
-function teacherVoice(){
-  const msg = new SpeechSynthesisUtterance(
-    "Good morning students. Welcome to " +
-    document.getElementById("className").innerText
-  );
-  speechSynthesis.speak(msg);
+/* CREATE STUDENTS */
+function createStudents(count){
+  const box = document.getElementById("students");
+  box.innerHTML = "";
+
+  const positions = [
+    {l:20},{l:28},{l:36},{l:56},{l:64},{l:72}
+  ];
+
+  for(let i=0;i<count;i++){
+    const s = document.createElement("div");
+    s.className="student";
+    s.style.left = positions[i].l+"%";
+    s.style.bottom="35%";
+    s.onclick = ()=>{ s.classList.toggle("absent"); updateAttendance(); };
+    box.appendChild(s);
+  }
 }
 
-/* attendance */
-function toggleAttendance(el){
-  el.classList.toggle("absent");
-  updateCount();
-}
-
-function updateCount(){
+/* ATTENDANCE */
+function updateAttendance(){
   const students = document.querySelectorAll(".student");
   let present = 0;
   students.forEach(s=>{
     if(!s.classList.contains("absent")) present++;
   });
-  document.getElementById("count").innerText = present;
+  document.getElementById("presentCount").innerText = present;
+  document.getElementById("absentCount").innerText = totalStudents - present;
 }
 
-/* reset attendance when new class */
-function resetAttendance(){
-  const students = document.querySelectorAll(".student");
-  students.forEach(s=>s.classList.remove("absent"));
-  updateCount();
+/* REPORT */
+function showReport(){
+  alert(
+    "📋 Attendance Report\n\n"+
+    document.getElementById("className").innerText+"\n"+
+    "Present: "+document.getElementById("presentCount").innerText+"\n"+
+    "Absent: "+document.getElementById("absentCount").innerText
+  );
+}
+
+/* TEACHER VOICE (Gujarati + Hindi) */
+function teacherVoice(auto=false){
+  const text = auto
+    ? "નમસ્તે વિદ્યાર્થીઓ. સ્વાગત છે."
+    : "Good morning students. Please sit properly.";
+
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang = auto ? "gu-IN" : "hi-IN";
+  speechSynthesis.speak(msg);
 }
 </script>
 
