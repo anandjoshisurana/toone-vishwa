@@ -9,7 +9,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 5, 10);
+camera.position.set(0, 5, 12);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -31,15 +31,60 @@ const ground = new THREE.Mesh(
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 
-// SCHOOL BUILDING (temporary box)
+// SCHOOL BUILDING
 const school = new THREE.Mesh(
-  new THREE.BoxGeometry(6, 4, 6),
+  new THREE.BoxGeometry(8, 5, 8),
   new THREE.MeshStandardMaterial({ color: 0xffffff })
 );
-school.position.y = 2;
+school.position.y = 2.5;
 scene.add(school);
 
-// Zoom In / Out
+// DOOR (ROOM ENTRY)
+const door = new THREE.Mesh(
+  new THREE.BoxGeometry(1.5, 2.5, 0.1),
+  new THREE.MeshStandardMaterial({ color: 0x654321 })
+);
+door.position.set(0, 1.25, 4.01);
+scene.add(door);
+
+// CLASSROOM (inside)
+const classroom = new THREE.Mesh(
+  new THREE.BoxGeometry(10, 5, 10),
+  new THREE.MeshStandardMaterial({
+    color: 0xf5deb3,
+    side: THREE.BackSide
+  })
+);
+classroom.visible = false;
+scene.add(classroom);
+
+// Raycaster
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// CLICK EVENT
+window.addEventListener("click", (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects([door]);
+
+  if (intersects.length > 0) {
+    enterClassroom();
+  }
+});
+
+// ENTER CLASSROOM FUNCTION
+function enterClassroom() {
+  classroom.visible = true;
+  school.visible = false;
+  door.visible = false;
+
+  camera.position.set(0, 2, 0);
+}
+
+// Zoom
 window.addEventListener("wheel", (e) => {
   camera.position.z += e.deltaY * 0.01;
 });
@@ -54,7 +99,6 @@ window.addEventListener("resize", () => {
 // Animate
 function animate() {
   requestAnimationFrame(animate);
-  school.rotation.y += 0.002;
   renderer.render(scene, camera);
 }
 animate();
